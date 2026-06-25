@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeeban Sumans — Investor Relations &amp; Capital Markets</title>
+<meta name="description" content="Portfolio of Sanjeeban Sumans: valuation research, equity analysis, and quantitative finance projects.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFEDE6;
+    --card:#F8F7F2;
+    --ink:#1B2430;
+    --ink-soft:#5C6470;
+    --rule:#D9D5C9;
+    --green:#3E7C5A;
+    --red:#C44536;
+    --max:920px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:var(--ink); }
+
+  :focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero{
+    padding:96px 0 64px;
+    border-bottom:1px solid var(--rule);
+  }
+
+  .hero .eyebrow{
+    opacity:0;
+    animation:rise 0.7s ease forwards;
+    animation-delay:0.05s;
+  }
+
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(40px, 6vw, 64px);
+    margin:14px 0 6px;
+    letter-spacing:-0.01em;
+    opacity:0;
+    animation:rise 0.7s ease forwards;
+    animation-delay:0.15s;
+  }
+
+  .tagline{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(20px, 2.6vw, 26px);
+    color:var(--ink);
+    margin:0 0 14px;
+    max-width:560px;
+    opacity:0;
+    animation:rise 0.7s ease forwards;
+    animation-delay:0.28s;
+  }
+
+  .subline{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:520px;
+    margin:0 0 40px;
+    opacity:0;
+    animation:rise 0.7s ease forwards;
+    animation-delay:0.4s;
+  }
+
+  .hero-stat{
+    display:inline-flex;
+    align-items:center;
+    gap:18px;
+    opacity:0;
+    animation:rise 0.7s ease forwards;
+    animation-delay:0.52s;
+  }
+
+  .stat-mark{
+    position:relative;
+    display:inline-block;
+    padding:10px 22px;
+  }
+
+  .stat-mark svg{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    overflow:visible;
+  }
+
+  .stat-mark path{
+    fill:none;
+    stroke:var(--red);
+    stroke-width:3;
+    stroke-linecap:round;
+    stroke-dasharray:420;
+    stroke-dashoffset:420;
+    transition:stroke-dashoffset 1.1s ease 0.9s;
+  }
+
+  .stat-mark.drawn path{ stroke-dashoffset:0; }
+
+  .stat-mark .num{
+    position:relative;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:26px;
+    font-weight:500;
+  }
+
+  .hero-stat .gloss{
+    color:var(--ink-soft);
+    font-size:14px;
+    max-width:280px;
+  }
+
+  .contact-row{
+    margin-top:44px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    opacity:0;
+    animation:rise 0.7s ease forwards;
+    animation-delay:0.62s;
+  }
+
+  .contact-row a, .contact-row span{
+    text-decoration:none;
+    border-bottom:1px solid var(--rule);
+    padding-bottom:2px;
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  /* ---------- Sections ---------- */
+
+  section{
+    padding:56px 0;
+    border-bottom:1px solid var(--rule);
+  }
+
+  .positioning p{
+    font-size:18px;
+    max-width:680px;
+    margin:0;
+  }
+
+  h2.section-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:22px;
+    margin:0 0 32px;
+  }
+
+  /* ---------- Work cards ---------- */
+
+  .work-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--rule);
+    border:1px solid var(--rule);
+  }
+
+  .card{
+    background:var(--card);
+    padding:28px;
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity 0.6s ease, transform 0.6s ease, background 0.2s ease;
+  }
+
+  .card.is-visible{ opacity:1; transform:translateY(0); }
+
+  .card:hover{ background:#FFFFFF; }
+
+  .card .eyebrow{ margin-bottom:14px; display:block; }
+
+  .card h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:19px;
+    margin:0 0 10px;
+    line-height:1.3;
+  }
+
+  .card p{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin:0 0 14px;
+  }
+
+  .card .link{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    text-decoration:none;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:1px;
+  }
+
+  /* ---------- Credentials ---------- */
+
+  .cred-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+
+  .cred-list li{
+    display:flex;
+    justify-content:space-between;
+    gap:24px;
+    padding:14px 0;
+    border-top:1px solid var(--rule);
+    font-size:15px;
+  }
+
+  .cred-list li:first-child{ border-top:none; }
+
+  .cred-list .label{ color:var(--ink-soft); font-size:13px; font-family:'IBM Plex Mono', monospace; text-transform:uppercase; letter-spacing:0.08em; white-space:nowrap; padding-top:2px;}
+
+  .cred-list .value{ text-align:right; }
+
+  /* ---------- Footer ---------- */
+
+  footer{
+    padding:48px 0 80px;
+  }
+
+  footer .line1{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:20px;
+    margin:0 0 18px;
+  }
+
+  footer .meta{
+    color:var(--ink-soft);
+    font-size:14px;
+    margin:0 0 28px;
+  }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width:680px){
+    .hero{ padding:64px 0 48px; }
+    .work-grid{ grid-template-columns:1fr; }
+    .cred-list li{ flex-direction:column; gap:4px; }
+    .cred-list .value{ text-align:left; }
+    .hero-stat{ flex-direction:column; align-items:flex-start; gap:10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .hero .eyebrow, .hero h1, .tagline, .subline, .hero-stat, .contact-row, .card{ opacity:1 !important; transform:none !important; }
+    .stat-mark path{ stroke-dashoffset:0 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap hero">
+  <span class="eyebrow">Investor Relations / Capital Markets</span>
+  <h1>Sanjeeban Sumans</h1>
+  <p class="tagline">I build the analysis. Then I write the sentence that explains it.</p>
+  <p class="subline">MSc Finance, Lancaster University (Merit). CFA Level I candidate, February 2027. British and Swiss citizen, currently in the UK and working toward Zurich.</p>
+
+  <div class="hero-stat">
+    <span class="stat-mark" id="heroMark">
+      <svg viewBox="0 0 100 50" preserveAspectRatio="none">
+        <path d="M8,28 C6,12 28,3 50,4 C75,5 95,9 93,27 C91,45 65,46 48,45 C25,44 10,42 8,28 Z"/>
+      </svg>
+      <span class="num">R² 0.562</span>
+    </span>
+    <span class="gloss">Dissertation finding: the price to earnings model outperformed DCF and DDM by a wide margin, tested across 13,448 company years of data.</span>
+  </div>
+
+  <div class="contact-row">
+    <a href="mailto:youremail@example.com">youremail@example.com</a>
+    <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+    <span>Gloucester, UK</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="positioning">
+    <p>My dissertation tested four ways analysts value a company, dividend discount, discounted cash flow, residual income and the price to earnings multiple, against real outcomes across thousands of companies. The earnings multiple won by a wide margin. That is the instinct investor relations runs on every quarter: take the number behind the model, work out why it moved, and turn it into the sentence an analyst can act on.</p>
+  </section>
+
+  <section>
+    <h2 class="section-title">Selected work</h2>
+    <div class="work-grid">
+
+      <div class="card">
+        <span class="eyebrow">Dissertation / MSc Finance, Lancaster</span>
+        <h3>Which valuation model actually predicts price</h3>
+        <p>Built dividend discount, discounted cash flow, residual income and price to earnings models in Stata, with CAPM cost of equity by industry and a two year forecast horizon. Tested all four against true outcomes across more than 13,000 firm years. The earnings multiple model explained 56% of price movement against 11% for discounted cash flow.</p>
+        <a class="link" href="mailto:youremail@example.com?subject=Dissertation%20request">Full paper on request</a>
+      </div>
+
+      <div class="card">
+        <span class="eyebrow">Equity research / The Analyst</span>
+        <h3>A full sell side case for Croda International</h3>
+        <p>Wrote an independent buy or sell view the way a research desk builds one: thesis, valuation, catalysts, and the risks that break it. The harder part was not reaching a conclusion. It was defending it in front of people who ask why.</p>
+        <a class="link" href="#">Read the pitch</a>
+      </div>
+
+      <div class="card">
+        <span class="eyebrow">Quant / independent project</span>
+        <h3>Forecasting volatility before the market reprices it</h3>
+        <p>Built a GARCH model to forecast volatility and a Monte Carlo simulation to estimate Value at Risk, the same two tools a markets or risk desk runs every day. Code and notes are documented on GitHub.</p>
+        <a class="link" href="https://github.com/yourusername" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+
+      <div class="card">
+        <span class="eyebrow">Simulation / AmplifyME Finance Accelerator</span>
+        <h3>Top 15 of more than 100 candidates</h3>
+        <p>Ran a trading book inside a live market simulation, managing risk and reporting performance against budget under real time pressure, against more than 100 other candidates from across the UK.</p>
+        <a class="link" href="#">More detail</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Credentials</h2>
+    <ul class="cred-list">
+      <li><span class="label">Education</span><span class="value">MSc Finance, Lancaster University (Merit)</span></li>
+      <li><span class="label">Education</span><span class="value">BSc Accounting and Finance, University of Gloucestershire (2:1)</span></li>
+      <li><span class="label">Charter</span><span class="value">CFA Level I candidate, sitting February 2027</span></li>
+      <li><span class="label">Professional</span><span class="value">10+ exemptions across ACCA and CIMA</span></li>
+      <li><span class="label">Citizenship</span><span class="value">British and Swiss, full right to work in the EU and Switzerland</span></li>
+      <li><span class="label">Languages</span><span class="value">English (native), German (building toward fluency)</span></li>
+      <li><span class="label">Markets</span><span class="value">FTMO funded trader, three times, forex and commodities</span></li>
+    </ul>
+  </section>
+</div>
+
+<footer class="wrap">
+  <p class="line1">Available from September 1.</p>
+  <p class="meta">Based in Gloucester, UK. Open to relocating to Zurich.</p>
+  <div class="contact-row" style="opacity:1;">
+    <a href="mailto:youremail@example.com">youremail@example.com</a>
+    <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/yourusername" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  // Draw the hero annotation mark in shortly after load
+  window.addEventListener('DOMContentLoaded', function(){
+    var mark = document.getElementById('heroMark');
+    requestAnimationFrame(function(){ mark.classList.add('drawn'); });
+  });
+
+  // Reveal cards as they enter the viewport
+  var cards = document.querySelectorAll('.card');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.15 });
+    cards.forEach(function(c){ io.observe(c); });
+  } else {
+    cards.forEach(function(c){ c.classList.add('is-visible'); });
+  }
+</script>
+
+</body>
+</html>
