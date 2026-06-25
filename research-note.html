@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeeban Sumans — Equity Valuation in Practice (Research Note)</title>
+<meta name="description" content="One page summary of an MSc Finance dissertation comparing DCF, DDM, RIVM and forward P/E valuation models across 13,448 US firm years.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFEDE6; --card:#F8F7F2; --ink:#1B2430; --ink-soft:#5C6470;
+    --rule:#D9D5C9; --green:#3E7C5A; --red:#C44536; --max:760px;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:var(--ink); }
+  :focus-visible{ outline:2px solid var(--red); outline-offset:3px; }
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  header.top{ padding:64px 0 40px; border-bottom:1px solid var(--rule); }
+  header.top a.back{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; text-decoration:none;
+    color:var(--ink-soft); border-bottom:1px solid var(--rule); padding-bottom:2px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-size:clamp(26px, 4vw, 36px);
+    line-height:1.25; margin:16px 0 10px;
+  }
+  .subtitle{ color:var(--ink-soft); font-size:14.5px; margin:0; }
+  .stat-band{
+    display:flex; flex-wrap:wrap; gap:36px; padding:36px 0; border-bottom:1px solid var(--rule);
+  }
+  .stat-mark{ position:relative; display:inline-block; padding:6px 18px; }
+  .stat-mark svg{ position:absolute; top:0; left:0; width:100%; height:100%; overflow:visible; }
+  .stat-mark path{
+    fill:none; stroke:var(--red); stroke-width:3; stroke-linecap:round;
+    stroke-dasharray:420; stroke-dashoffset:420; transition:stroke-dashoffset 1.1s ease 0.4s;
+  }
+  .stat-mark.drawn path{ stroke-dashoffset:0; }
+  .stat-mark .num{ position:relative; font-family:'IBM Plex Mono', monospace; font-size:24px; font-weight:500; }
+  .stat-item .cap{ font-size:13px; color:var(--ink-soft); max-width:220px; margin-top:8px; }
+  section{ padding:40px 0; border-bottom:1px solid var(--rule); }
+  section:last-of-type{ border-bottom:none; }
+  h2{ font-family:'Fraunces', serif; font-weight:600; font-size:18px; margin:0 0 16px; }
+  p{ margin:0 0 14px; font-size:15px; }
+  p:last-child{ margin-bottom:0; }
+  table{ width:100%; border-collapse:collapse; font-size:14px; margin-top:8px; }
+  th, td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--rule); }
+  th{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--ink-soft); font-weight:500;
+  }
+  td.num, th.num{ font-family:'IBM Plex Mono', monospace; text-align:right; }
+  tr.lead td{ font-weight:600; }
+  .download{
+    display:inline-flex; align-items:center; gap:10px; margin-top:8px;
+    background:var(--card); border:1px solid var(--rule); border-radius:6px;
+    padding:14px 18px; text-decoration:none; font-size:14px; color:var(--ink);
+    transition:background 0.2s ease;
+  }
+  .download:hover{ background:#fff; }
+  .download .arrow{ font-family:'IBM Plex Mono', monospace; }
+  footer{ padding:36px 0 64px; color:var(--ink-soft); font-size:13px; }
+  @media (max-width:560px){
+    .stat-band{ flex-direction:column; gap:24px; }
+    table{ font-size:13px; }
+    th, td{ padding:8px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="back" href="index.html">← Back to portfolio</a>
+    <span class="eyebrow" style="display:block; margin-top:18px;">Research note / MSc Finance dissertation, Lancaster University</span>
+    <h1>Equity Valuation in Practice: which model actually predicts price?</h1>
+    <p class="subtitle">A large sample test of DCF, DDM, RIVM and forward P/E across 13,448 US firm years (2005–2015), with a case study of Adobe Inc. Submitted September 2025.</p>
+  </header>
+
+  <div class="stat-band">
+    <div class="stat-item">
+      <span class="stat-mark" id="mark1">
+        <svg viewBox="0 0 100 50" preserveAspectRatio="none"><path d="M8,28 C6,12 28,3 50,4 C75,5 95,9 93,27 C91,45 65,46 48,45 C25,44 10,42 8,28 Z"/></svg>
+        <span class="num">R² 0.563</span>
+      </span>
+      <p class="cap">Forward P/E. The highest explanatory power of any model tested, against price.</p>
+    </div>
+    <div class="stat-item">
+      <span class="num" style="font-family:'IBM Plex Mono', monospace; font-size:24px; font-weight:500;">13,448</span>
+      <p class="cap">US firm years, 2005 to 2015, after Winsorisation and screening from an initial 195,845 firm year panel.</p>
+    </div>
+    <div class="stat-item">
+      <span class="num" style="font-family:'IBM Plex Mono', monospace; font-size:24px; font-weight:500;">4</span>
+      <p class="cap">Valuation models, tested under identical CAPM and growth assumptions so differences reflect the model, not the inputs.</p>
+    </div>
+  </div>
+
+  <section>
+    <h2>The question</h2>
+    <p>Analysts have two broad toolkits for valuing a company: flows based models that discount dividends, cash flows or residual income back to a present value, and multiples that price a company against its peers on forward earnings. Each has a long academic literature behind it. What is less settled is which one actually tracks real market prices best, and whether that answer changes once a company is built on intangible assets rather than physical ones.</p>
+    <p>This dissertation tests four of the most common approaches, the Dividend Discount Model, Discounted Cash Flow, the Residual Income Valuation Model, and forward Price to Earnings, against 13,448 real US firm years, then checks whether the ranking holds for high R&amp;D, intangible heavy firms specifically.</p>
+  </section>
+
+  <section>
+    <h2>The result</h2>
+    <p>Forward P/E was the most accurate model on every measure tested, the least biased, the lowest forecast error, and the strongest explanatory power. RIVM was a clear second among the flows based models. DCF and DDM both performed considerably worse, and remained highly sensitive to the growth and discount rate assumptions feeding them.</p>
+    <table>
+      <thead>
+        <tr><th>Model</th><th class="num">R²</th><th class="num">Median Abs. Error</th><th class="num">Mean Error (bias)</th></tr>
+      </thead>
+      <tbody>
+        <tr class="lead"><td>Forward P/E</td><td class="num">0.563</td><td class="num">0.314</td><td class="num">−0.012</td></tr>
+        <tr><td>RIVM</td><td class="num">0.510</td><td class="num">0.387</td><td class="num">−0.129</td></tr>
+        <tr><td>DDM</td><td class="num">0.120</td><td class="num">0.971</td><td class="num">−0.699</td></tr>
+        <tr><td>DCF</td><td class="num">0.114</td><td class="num">0.881</td><td class="num">−0.241</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px; font-size:13.5px; color:var(--ink-soft);">Error defined as (Value − Price) / Price. Negative mean error indicates systematic undervaluation. All figures from the post Winsorisation common sample, N = 13,448.</p>
+  </section>
+
+  <section>
+    <h2>Why it holds under stress</h2>
+    <p>The ranking did not move when the assumptions did. Resetting the terminal growth rate to zero or moving the market risk premium between 4% and 8% left forward P/E completely unchanged, since it does not depend on a discount rate at all. DCF was the most fragile, its error nearly doubled at a lower market risk premium. The same pattern held when the sample was split into high R&amp;D and low R&amp;D firms, P/E remained strongest in both (R² of 0.515 and 0.571), with RIVM second (0.462 and 0.501), confirming that multiples absorb the distortion intangible heavy accounting creates in book value and earnings.</p>
+  </section>
+
+  <section>
+    <h2>The case study: Adobe Inc.</h2>
+    <p>To see whether real analysts behave the way the data suggests they should, I compared three independent 2023 to 2025 analyst reports on Adobe, a high intangible, subscription revenue business that pays no dividend. None of the three used a dividend model, for the obvious reason. Two built their target price entirely on relative multiples, EV to Sales and a peer benchmarked scorecard. The third, New Constructs, ran a reverse DCF after capitalising Adobe's R&amp;D spend, concluding the market price implied more than a century of sustained growth to justify itself, a useful reminder that even a sceptical, judgement heavy approach still has to wrestle with the same intangible problem the large sample results point to.</p>
+  </section>
+
+  <section>
+    <h2>Read the full paper</h2>
+    <p>The complete dissertation runs 47 pages, including the full literature review, model derivations, and sensitivity testing.</p>
+    <a class="download" href="mailto:youremail@example.com?subject=Dissertation%20request">
+      <span class="arrow">→</span> Request the full paper
+    </a>
+  </section>
+
+  <footer>
+    Sanjeeban Sumans. MSc Finance, Lancaster University, September 2025.
+  </footer>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function(){
+    var mark = document.getElementById('mark1');
+    requestAnimationFrame(function(){ mark.classList.add('drawn'); });
+  });
+</script>
+
+</body>
+</html>
