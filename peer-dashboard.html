@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeeban Sumans — Specialty Ingredients Peer Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --paper:#EFEDE6; --card:#F8F7F2; --ink:#1B2430; --ink-soft:#5C6470;
+    --rule:#D9D5C9; --green:#3E7C5A; --red:#C44536; --max:780px;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:var(--ink); }
+  :focus-visible{ outline:2px solid var(--red); outline-offset:3px; }
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  header.top{ padding:64px 0 8px; }
+  header.top a.back{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; text-decoration:none;
+    color:var(--ink-soft); border-bottom:1px solid var(--rule); padding-bottom:2px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-size:clamp(26px, 4vw, 34px);
+    line-height:1.25; margin:16px 0 14px;
+  }
+  .intro{ font-size:15.5px; color:var(--ink); max-width:600px; margin:0 0 36px; }
+  .panel{ background:var(--card); border:1px solid var(--rule); border-radius:8px; padding:24px; margin-bottom:32px; }
+  .toggles{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .toggle{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; padding:9px 16px;
+    border:1px solid var(--rule); border-radius:5px; background:var(--paper); color:var(--ink-soft);
+    cursor:pointer; transition:all 0.15s ease;
+  }
+  .toggle.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .chart-wrap{ position:relative; height:320px; }
+  .caption{ font-size:12.5px; color:var(--ink-soft); margin-top:14px; font-style:italic; }
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px; }
+  th, td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--rule); }
+  th{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--ink-soft); font-weight:500;
+  }
+  td.num, th.num{ text-align:right; font-family:'IBM Plex Mono', monospace; }
+  tr.lead td{ font-weight:600; }
+  .notes{ font-size:13px; color:var(--ink-soft); margin-top:24px; }
+  footer{ padding:48px 0 64px; color:var(--ink-soft); font-size:13px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="back" href="croda-case-study.html" data-carry-from>← Back to the case study</a>
+    <span class="eyebrow" style="display:block; margin-top:18px;">Benchmarking dashboard / Specialty ingredients</span>
+    <h1>Croda against its real peer set</h1>
+  </header>
+
+  <p class="intro">The same comps data sitting in the Croda valuation model, turned into something a director could open cold and understand in ten seconds. Pick a metric, see where Croda actually sits against DSM-Firmenich, Symrise, and Givaudan.</p>
+
+  <div class="panel">
+    <div class="toggles" id="toggles"></div>
+    <div class="chart-wrap"><canvas id="chart"></canvas></div>
+    <p class="caption" id="caption"></p>
+  </div>
+
+  <table id="datatable"></table>
+
+  <p class="notes">DSM-Firmenich and Symrise EV/EBITDA are not shown, net debt isn't cleanly disclosed for either from public aggregators, and a guessed figure would undermine the rest of this. Full sourcing sits in the Comps tab of the <a href="croda-case-study.html" data-carry-from target="_blank" rel="noopener">Croda valuation model</a>.</p>
+</div>
+
+<footer class="wrap">
+  Sanjeeban Sumans. June 2026.
+</footer>
+
+<script>
+const companies = ["Croda", "DSM-Firmenich", "Symrise", "Givaudan"];
+const colors = ["#C44536", "#5C6470", "#9FB8AE", "#1B2430"];
+
+const metrics = {
+  revenue: {
+    label: "Revenue (£bn)",
+    values: [1.70, 10.61, 4.21, 6.81],
+    caption: "Revenue, most recent reported full year, converted to GBP at Croda's own disclosed average 2025 rates."
+  },
+  ebitdamargin: {
+    label: "EBITDA margin (%)",
+    values: [23.7, 18.3, 21.9, null],
+    caption: "EBITDA margin where cleanly derivable. Croda: net debt ÷ leverage, both co.-disclosed. Givaudan omitted, EBITDA not cleanly separable from public data without estimation."
+  },
+  pe: {
+    label: "P/E (adjusted, x)",
+    values: [21.3, 21.8, 36.0, 20.6],
+    caption: "Adjusted / underlying P/E. Symrise ranges 32x-44x across sources depending on date, 36x used as representative, flagged as the least precise figure on this page."
+  },
+  evrevenue: {
+    label: "EV / Revenue (x)",
+    values: [2.86, 1.50, null, null],
+    caption: "EV/Revenue only shown where net debt is cleanly disclosed (Croda, DSM-Firmenich). Better to show two trustworthy bars than four guessed ones."
+  }
+};
+
+let activeMetric = "revenue";
+let chart;
+
+function buildToggles(){
+  const container = document.getElementById("toggles");
+  Object.keys(metrics).forEach(key => {
+    const btn = document.createElement("button");
+    btn.className = "toggle" + (key === activeMetric ? " active" : "");
+    btn.textContent = metrics[key].label;
+    btn.onclick = () => { activeMetric = key; render(); };
+    btn.dataset.key = key;
+    container.appendChild(btn);
+  });
+}
+
+function render(){
+  document.querySelectorAll(".toggle").forEach(b => {
+    b.classList.toggle("active", b.dataset.key === activeMetric);
+  });
+
+  const m = metrics[activeMetric];
+  document.getElementById("caption").textContent = m.caption;
+
+  const ctx = document.getElementById("chart").getContext("2d");
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: companies,
+      datasets: [{
+        data: m.values,
+        backgroundColor: colors,
+        borderRadius: 4,
+        maxBarThickness: 64
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: "#D9D5C9" }, ticks: { color: "#5C6470" } },
+        x: { grid: { display: false }, ticks: { color: "#1B2430", font: { family: "IBM Plex Sans" } } }
+      }
+    }
+  });
+
+  const table = document.getElementById("datatable");
+  let html = "<tr><th>Company</th>";
+  Object.keys(metrics).forEach(k => { html += `<th class="num">${metrics[k].label}</th>`; });
+  html += "</tr>";
+  companies.forEach((c, i) => {
+    html += `<tr class="${c === 'Croda' ? 'lead' : ''}"><td>${c}</td>`;
+    Object.keys(metrics).forEach(k => {
+      const v = metrics[k].values[i];
+      html += `<td class="num">${v === null ? '—' : v}</td>`;
+    });
+    html += "</tr>";
+  });
+  table.innerHTML = html;
+}
+
+buildToggles();
+render();
+</script>
+
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var from = params.get("from");
+  var valid = ["index.html","finance.html","accounting.html"];
+  var portfolio = (from && valid.indexOf(from) > -1) ? from : "index.html";
+  document.querySelectorAll("a[data-to-portfolio]").forEach(function(a){
+    a.setAttribute("href", portfolio);
+  });
+  document.querySelectorAll("a[data-carry-from]").forEach(function(a){
+    var base = a.getAttribute("href").split("?")[0];
+    if (from) a.setAttribute("href", base + "?from=" + encodeURIComponent(from));
+  });
+})();
+</script>
+
+</body>
+</html>
