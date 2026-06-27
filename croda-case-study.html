@@ -64,7 +64,7 @@
 
 <div class="wrap">
   <header class="top">
-    <a class="back" href="index.html">← Back to portfolio</a>
+    <a class="back" href="index.html" data-to-portfolio>← Back to portfolio</a>
     <span class="eyebrow" style="display:block; margin-top:18px;">Equity research / Croda International plc</span>
     <h1>The Croda case study</h1>
   </header>
@@ -94,7 +94,7 @@
         <h2>IR Q&amp;A prep</h2>
         <p>The hard questions I'd expect on the call, and the lines I'd want the CFO to have ready.</p>
       </div>
-      <a class="btn" href="croda-ir-prep.html" target="_blank" rel="noopener">Open page →</a>
+      <a class="btn" href="croda-ir-prep.html" data-carry-from target="_blank" rel="noopener">Open page →</a>
     </div>
   </div>
 </div>
@@ -103,5 +103,20 @@
   Sanjeeban Sumans. June 2026.
 </footer>
 
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var from = params.get("from");
+  var valid = ["index.html","finance.html","accounting.html"];
+  var portfolio = (from && valid.indexOf(from) > -1) ? from : "index.html";
+  document.querySelectorAll("a[data-to-portfolio]").forEach(function(a){
+    a.setAttribute("href", portfolio);
+  });
+  document.querySelectorAll("a[data-carry-from]").forEach(function(a){
+    var base = a.getAttribute("href").split("?")[0];
+    if (from) a.setAttribute("href", base + "?from=" + encodeURIComponent(from));
+  });
+})();
+</script>
 </body>
 </html>
