@@ -80,7 +80,7 @@
 
 <div class="wrap">
   <header class="top">
-    <a class="back" href="index.html">← Back to portfolio</a>
+    <a class="back" href="index.html" data-to-portfolio>← Back to portfolio</a>
     <span class="eyebrow" style="display:block; margin-top:18px;">Research note / MSc Finance dissertation, Lancaster University</span>
     <h1>Equity Valuation in Practice: which model actually predicts price?</h1>
     <p class="subtitle">A large sample test of DCF, DDM, RIVM and forward P/E across 13,448 US firm years (2005–2015), with a case study of Adobe Inc. Submitted September 2025.</p>
@@ -157,5 +157,20 @@
   });
 </script>
 
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var from = params.get("from");
+  var valid = ["index.html","fpa.html","accounting.html"];
+  var portfolio = (from && valid.indexOf(from) > -1) ? from : "index.html";
+  document.querySelectorAll("a[data-to-portfolio]").forEach(function(a){
+    a.setAttribute("href", portfolio);
+  });
+  document.querySelectorAll("a[data-carry-from]").forEach(function(a){
+    var base = a.getAttribute("href").split("?")[0];
+    if (from) a.setAttribute("href", base + "?from=" + encodeURIComponent(from));
+  });
+})();
+</script>
 </body>
 </html>
