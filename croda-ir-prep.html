@@ -61,7 +61,7 @@
 
 <div class="wrap">
   <header class="top">
-    <a class="back" href="croda-case-study.html">← Back to the case study</a>
+    <a class="back" href="croda-case-study.html" data-carry-from>← Back to the case study</a>
     <span class="eyebrow" style="display:block; margin-top:18px;">Investor relations prep / Croda International plc</span>
     <h1>The questions I'd expect on the call</h1>
   </header>
@@ -120,5 +120,20 @@
   Sanjeeban Sumans. June 2026.
 </footer>
 
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var from = params.get("from");
+  var valid = ["index.html","finance.html","accounting.html"];
+  var portfolio = (from && valid.indexOf(from) > -1) ? from : "index.html";
+  document.querySelectorAll("a[data-to-portfolio]").forEach(function(a){
+    a.setAttribute("href", portfolio);
+  });
+  document.querySelectorAll("a[data-carry-from]").forEach(function(a){
+    var base = a.getAttribute("href").split("?")[0];
+    if (from) a.setAttribute("href", base + "?from=" + encodeURIComponent(from));
+  });
+})();
+</script>
 </body>
 </html>
