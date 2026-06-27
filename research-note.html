@@ -161,7 +161,7 @@
 (function(){
   var params = new URLSearchParams(window.location.search);
   var from = params.get("from");
-  var valid = ["index.html","fpa.html","accounting.html"];
+  var valid = ["index.html","finance.html","accounting.html"];
   var portfolio = (from && valid.indexOf(from) > -1) ? from : "index.html";
   document.querySelectorAll("a[data-to-portfolio]").forEach(function(a){
     a.setAttribute("href", portfolio);
